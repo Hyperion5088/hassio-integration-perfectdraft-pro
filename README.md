@@ -119,4 +119,6 @@ If a new keg appears before the shipped catalogue knows about it, use the `perfe
 
 Catalogue maintenance is intentionally separate from Home Assistant runtime. Developers can run `scripts/crawl_catalogue.py --discover-only` to discover product URLs from the sitemap, or run the same script without `--discover-only` to crawl pages slowly and write `catalogue-crawl.json` for review before updating the static catalogue.
 
+The maintainer crawler also keeps `catalogue-history.json`. That history merges the shipped Python catalogue, previous crawl data, and the current crawl so beers that disappear from the website are retained as retired products instead of being lost. It also records likely old-ID to new-ID aliases when stable identifiers such as SKU, GTIN, product code, or name/brewery match a current product. Use `scripts/crawl_catalogue.py --python-output catalogue-review.py` to generate a reviewable Python catalogue snapshot from that history before manually updating `custom_components/perfectdraft/catalogue.py`.
+
 For the full technical story of how this integration was reverse-engineered, see [DISCOVERY.md](DISCOVERY.md).
