@@ -2,7 +2,7 @@
   "config": {
     "step": {
       "user": {
-        "title": "PerfectDraft Account",
+        "title": "PerfectDraft Taproom Account",
         "description": "Enter your PerfectDraft app credentials.",
         "data": {
           "email": "Email",
@@ -11,7 +11,7 @@
       },
       "token": {
         "title": "Verification Token",
-        "description": "Paste a verification token from PerfectDraft's website. See the [setup instructions](https://github.com/Hyperion5088/hassio-integration-perfectdraft-pro#step-2-verification-token) for the 30-second walkthrough. The token expires in 2 minutes, so generate it right before pasting.",
+        "description": "Paste a verification token from PerfectDraft's website. See the [setup instructions](https://github.com/Hyperion5088/hass-perfectdraft-taproom#step-2-verification-token) for the 30-second walkthrough. The token expires in 2 minutes, so generate it right before pasting.",
         "data": {
           "recaptcha_token": "Verification Token"
         }
@@ -31,7 +31,7 @@
       "unknown": "An unexpected error occurred."
     },
     "abort": {
-      "already_configured": "This PerfectDraft account is already configured.",
+      "already_configured": "This PerfectDraft Taproom account is already configured.",
       "reauth_successful": "Re-authentication successful."
     }
   },
@@ -88,7 +88,7 @@
   "options": {
     "step": {
       "init": {
-        "title": "PerfectDraft Options",
+        "title": "PerfectDraft Taproom Options",
         "data": {
           "scan_interval": "Polling interval (seconds)"
         }

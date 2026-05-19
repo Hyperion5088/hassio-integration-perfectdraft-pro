@@ -1,9 +1,9 @@
 {
   "domain": "perfectdraft",
-  "name": "PerfectDraft",
+  "name": "PerfectDraft Taproom",
   "version": "0.6.0",
-  "documentation": "https://github.com/Hyperion5088/hassio-integration-perfectdraft-pro",
-  "issue_tracker": "https://github.com/Hyperion5088/hassio-integration-perfectdraft-pro/issues",
+  "documentation": "https://github.com/Hyperion5088/hass-perfectdraft-taproom",
+  "issue_tracker": "https://github.com/Hyperion5088/hass-perfectdraft-taproom/issues",
   "codeowners": ["@Hyperion5088"],
   "config_flow": true,
   "iot_class": "cloud_polling",

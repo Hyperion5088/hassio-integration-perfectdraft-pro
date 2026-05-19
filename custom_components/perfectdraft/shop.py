@@ -12,7 +12,7 @@ import urllib.request
 import aiohttp
 
 SHOP_USER_AGENT = (
-    "HomeAssistant-PerfectDraft-Pro/0.6 "
+    "HomeAssistant-PerfectDraft-Taproom/0.6 "
     "(local Home Assistant integration; low-frequency product metadata cache)"
 )
 PERFECTDRAFT_KEGS_URL = (

@@ -100,7 +100,7 @@ class PerfectDraftConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     self._abort_if_unique_id_configured()
 
                     return self.async_create_entry(
-                        title=f"PerfectDraft ({self._email})",
+                        title=f"PerfectDraft Taproom ({self._email})",
                         data={
                             CONF_EMAIL: self._email,
                             CONF_ACCESS_TOKEN: client.access_token,

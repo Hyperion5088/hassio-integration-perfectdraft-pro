@@ -1,10 +1,10 @@
-# PerfectDraft Pro for Home Assistant
+# PerfectDraft Taproom for Home Assistant
 
-A Home Assistant custom integration for the [PerfectDraft Pro](https://www.perfectdraft.com/) beer dispenser. Monitor your keg's temperature, remaining volume, pour history, and more — right from your HA dashboard.
+PerfectDraft Taproom is a Home Assistant custom integration for the [PerfectDraft Pro](https://www.perfectdraft.com/) beer dispenser. Monitor your keg's temperature, remaining volume, pour history, beer catalogue details, shop stock signals, and more — right from your HA dashboard.
 
 ## Attribution
 
-This fork is based on the original PerfectDraft Pro Home Assistant integration by [Falkvinge](https://github.com/Falkvinge/hassio-integration-perfectdraft-pro). Thanks to the original project for the HACS packaging, setup flow, and baseline PerfectDraft API work.
+PerfectDraft Taproom is based on the original PerfectDraft Pro Home Assistant integration by [Falkvinge](https://github.com/Falkvinge/hassio-integration-perfectdraft-pro). Thanks to the original project for the HACS packaging, setup flow, and baseline PerfectDraft API work.
 
 ## Sensors
 
@@ -63,7 +63,7 @@ The machine's Boost status is exposed as a read-only sensor. A writable Boost co
 1. Open HACS in Home Assistant
 2. Click the three-dot menu > **Custom repositories**
 3. Add this repository URL and select **Integration** as the category
-4. Search for "PerfectDraft" and install
+4. Search for "PerfectDraft Taproom" and install
 5. Restart Home Assistant
 
 ### Manual
@@ -75,7 +75,7 @@ The machine's Boost status is exposed as a read-only sensor. A writable Boost co
 
 ### Step 1: Credentials
 
-Go to **Settings > Devices & Services > Add Integration > PerfectDraft** and enter your PerfectDraft app email and password.
+Go to **Settings > Devices & Services > Add Integration > PerfectDraft Taproom** and enter your PerfectDraft app email and password.
 
 ### Step 2: Verification Token
 
