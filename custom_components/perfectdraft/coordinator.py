@@ -1,6 +1,7 @@
 """DataUpdateCoordinator for PerfectDraft."""
 from __future__ import annotations
 
+import asyncio
 from datetime import timedelta
 import logging
 from typing import Any
@@ -34,6 +35,7 @@ class PerfectDraftDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
     """Single coordinator that polls the PerfectDraft API for all entities."""
 
     config_entry: ConfigEntry
+    _shop_cache_task: asyncio.Task | None = None
 
     def __init__(
         self,
@@ -42,6 +44,7 @@ class PerfectDraftDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         config_entry: ConfigEntry,
         beer_data: PerfectDraftBeerData,
     ) -> None:
+        self._hass = hass
         self.client = client
         self.beer_data = beer_data
         interval = config_entry.options.get(
@@ -83,7 +86,7 @@ class PerfectDraftDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
                 _LOGGER.debug("Active keg metadata unavailable: %s", err)
                 active_keg = {}
             current_product_id = _product_id_from_keg(active_keg.get("kegActive") or {})
-            await self.beer_data.async_update_shop_cache(
+            self._schedule_shop_cache_update(
                 _favorite_product_ids(profile),
                 current_product_id,
             )
@@ -99,6 +102,26 @@ class PerfectDraftDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         details["_profile"] = profile
         details["_beer_data"] = self.beer_data.snapshot()
         return details
+
+    def _schedule_shop_cache_update(
+        self,
+        product_ids: list[str],
+        current_product_id: str | None,
+    ) -> None:
+        """Refresh optional shop metadata without blocking HA setup/polling."""
+        if self._shop_cache_task and not self._shop_cache_task.done():
+            return
+
+        async def _refresh_shop_cache() -> None:
+            try:
+                await self.beer_data.async_update_shop_cache(
+                    product_ids,
+                    current_product_id,
+                )
+            except Exception as err:
+                _LOGGER.debug("Optional beer shop metadata unavailable: %s", err)
+
+        self._shop_cache_task = self._hass.async_create_task(_refresh_shop_cache())
 
 
 def _product_id_from_keg(active_keg: dict[str, Any]) -> str | None:

@@ -4,6 +4,7 @@ from __future__ import annotations
 from datetime import UTC, datetime, timedelta
 import logging
 from typing import Any
+import urllib.error
 
 import aiohttp
 from homeassistant.core import HomeAssistant
@@ -14,6 +15,12 @@ from .const import DOMAIN
 from .shop import async_fetch_available_beer_catalogue, async_fetch_shop_product
 
 _LOGGER = logging.getLogger(__name__)
+SHOP_FETCH_ERRORS = (
+    aiohttp.ClientError,
+    TimeoutError,
+    urllib.error.HTTPError,
+    urllib.error.URLError,
+)
 
 STORE_VERSION = 1
 STORE_KEY = f"{DOMAIN}_beer_data"
@@ -213,8 +220,11 @@ class PerfectDraftBeerData:
 
         try:
             data = await async_fetch_available_beer_catalogue(self._session)
-        except (aiohttp.ClientError, TimeoutError) as err:
+        except SHOP_FETCH_ERRORS as err:
             _LOGGER.debug("Unable to refresh PerfectDraft available beer list: %s", err)
+            return False
+        except (KeyError, TypeError, ValueError) as err:
+            _LOGGER.debug("Unable to parse PerfectDraft available beer list: %s", err)
             return False
 
         data["last_checked"] = _now().isoformat()
@@ -248,9 +258,16 @@ class PerfectDraftBeerData:
 
         try:
             shop_data = await async_fetch_shop_product(self._session, str(url))
-        except (aiohttp.ClientError, TimeoutError) as err:
+        except SHOP_FETCH_ERRORS as err:
             _LOGGER.debug(
                 "Unable to refresh PerfectDraft shop data for %s: %s",
+                product_id,
+                err,
+            )
+            return False
+        except (KeyError, TypeError, ValueError) as err:
+            _LOGGER.debug(
+                "Unable to parse PerfectDraft shop data for %s: %s",
                 product_id,
                 err,
             )
