@@ -1,5 +1,9 @@
 # PerfectDraft Taproom for Home Assistant
 
+<p align="center">
+  <img src="docs/brand/perfectdraft-taproom-icon-128.png" alt="PerfectDraft Taproom icon" width="128" height="128">
+</p>
+
 PerfectDraft Taproom is a Home Assistant custom integration for the [PerfectDraft Pro](https://www.perfectdraft.com/) beer dispenser. Monitor your keg's temperature, remaining volume, pour history, beer catalogue details, shop stock signals, and more — right from your HA dashboard.
 
 ## Attribution
