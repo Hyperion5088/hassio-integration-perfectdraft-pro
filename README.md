@@ -30,6 +30,7 @@ PerfectDraft Taproom is based on the original PerfectDraft Pro Home Assistant in
 | Door | Door open/closed state | — |
 | Pours | Number of pours since keg was loaded | — |
 | Last Pour | Volume of the most recent pour | mL |
+| Last Pour Pints | Volume of the most recent pour | pt |
 | Last Pour Duration | Duration of the most recent pour, disabled by default | ms |
 | Time to Target Temperature | Estimated cooling/heating time, with a `formatted_duration` attribute, disabled by default | s |
 | Mode | Current operating mode (standard, eco, etc.) | — |
@@ -40,6 +41,7 @@ PerfectDraft Taproom is based on the original PerfectDraft Pro Home Assistant in
 | Boost | Boost setting, disabled by default | — |
 | Eco Temperature | Eco mode target temperature, disabled by default | °C |
 | Volume Threshold | Configured low-volume threshold, disabled by default | L |
+| Volume Threshold Pints | Configured low-volume threshold, disabled by default | pt |
 
 ## Controls
 

@@ -170,6 +170,13 @@ def _get_last_pour_volume(data: dict) -> float | None:
     return round(float(val) * 1000)  # litres -> ml
 
 
+def _get_last_pour_pints(data: dict) -> float | None:
+    val = _get_details(data).get("volumeOfLastPour")
+    if val is None or val == 0:
+        return None
+    return round(float(val) / UK_PINT_LITRES, 2)
+
+
 def _get_firmware(data: dict) -> str | None:
     return _get_details(data).get("firmwareVersion")
 
@@ -217,6 +224,11 @@ def _get_eco_temperature(data: dict) -> float | None:
 def _get_volume_threshold(data: dict) -> float | None:
     val = _get_setting(data).get("volumeThreshold")
     return round(float(val), 2) if val is not None else None
+
+
+def _get_volume_threshold_pints(data: dict) -> float | None:
+    val = _get_setting(data).get("volumeThreshold")
+    return round(float(val) / UK_PINT_LITRES, 1) if val is not None else None
 
 
 def _get_time_to_target(data: dict) -> int | None:
@@ -292,6 +304,14 @@ SENSOR_DESCRIPTIONS: tuple[PerfectDraftSensorDescription, ...] = (
         native_unit_of_measurement="mL",
         icon="mdi:glass-mug-variant",
         value_fn=_get_last_pour_volume,
+    ),
+    PerfectDraftSensorDescription(
+        key="last_pour_pints",
+        translation_key="last_pour_pints",
+        native_unit_of_measurement="pt",
+        icon="mdi:glass-pint-outline",
+        suggested_display_precision=2,
+        value_fn=_get_last_pour_pints,
     ),
     PerfectDraftSensorDescription(
         key="firmware",
@@ -418,6 +438,15 @@ SENSOR_DESCRIPTIONS: tuple[PerfectDraftSensorDescription, ...] = (
         icon="mdi:keg-outline",
         entity_registry_enabled_default=False,
         value_fn=_get_volume_threshold,
+    ),
+    PerfectDraftSensorDescription(
+        key="volume_threshold_pints",
+        translation_key="volume_threshold_pints",
+        native_unit_of_measurement="pt",
+        icon="mdi:glass-pint-outline",
+        entity_registry_enabled_default=False,
+        suggested_display_precision=1,
+        value_fn=_get_volume_threshold_pints,
     ),
     PerfectDraftSensorDescription(
         key="time_to_target_temperature",

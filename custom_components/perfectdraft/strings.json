@@ -44,6 +44,7 @@
       "door": { "name": "Door" },
       "pours": { "name": "Pours" },
       "last_pour": { "name": "Last Pour" },
+      "last_pour_pints": { "name": "Last Pour Pints" },
       "firmware": { "name": "Firmware" },
       "mode": { "name": "Mode" },
       "active_keg_product_id": { "name": "Active Keg Product ID" },
@@ -61,6 +62,7 @@
       "boost": { "name": "Boost" },
       "eco_temperature": { "name": "Eco Temperature" },
       "volume_threshold": { "name": "Volume Threshold" },
+      "volume_threshold_pints": { "name": "Volume Threshold Pints" },
       "time_to_target_temperature": { "name": "Time to Target Temperature" },
       "last_pour_duration": { "name": "Last Pour Duration" },
       "keg_freshness": { "name": "Keg Freshness" }
