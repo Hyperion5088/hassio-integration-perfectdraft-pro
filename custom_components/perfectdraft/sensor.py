@@ -30,6 +30,7 @@ from .entity import (
 )
 
 KEG_TOTAL_VOLUME = 6.0  # litres
+UK_PINT_LITRES = 0.56826125
 KEG_FRESHNESS_DAYS = 30
 KEG_NEW_VOLUME_THRESHOLD = 5.5  # litres — above this + pours==0 means new keg
 
@@ -124,9 +125,9 @@ def _get_catalogue_job_status(data: dict) -> str:
 def _get_temperature(data: dict) -> float | None:
     val = _get_details(data).get("displayedBeerTemperatureInCelsius")
     if val is not None and val != 0:
-        return float(val)
+        return round(float(val), 1)
     val = _get_details(data).get("temperature")
-    return float(val) if val is not None else None
+    return round(float(val), 1) if val is not None else None
 
 
 def _get_volume_remaining(data: dict) -> float | None:
@@ -134,6 +135,13 @@ def _get_volume_remaining(data: dict) -> float | None:
     if vol is None:
         return None
     return round(float(vol) / KEG_TOTAL_VOLUME * 100, 1)
+
+
+def _get_pints_remaining(data: dict) -> float | None:
+    vol = _get_details(data).get("kegVolume")
+    if vol is None:
+        return None
+    return round(float(vol) / UK_PINT_LITRES, 1)
 
 
 def _get_connection_state(data: dict) -> str | None:
@@ -186,7 +194,7 @@ def _get_keg_pressure(data: dict) -> float | None:
 
 def _get_target_temperature(data: dict) -> float | None:
     val = _get_setting(data).get("temperature")
-    return float(val) if val is not None else None
+    return round(float(val), 1) if val is not None else None
 
 
 def _get_pressure_setpoint(data: dict) -> float | None:
@@ -203,7 +211,7 @@ def _get_boost(data: dict) -> str | None:
 
 def _get_eco_temperature(data: dict) -> float | None:
     val = _get_setting(data).get("ecoModeBeerTemperatureSetPoint")
-    return float(val) if val is not None else None
+    return round(float(val), 1) if val is not None else None
 
 
 def _get_volume_threshold(data: dict) -> float | None:
@@ -238,7 +246,7 @@ SENSOR_DESCRIPTIONS: tuple[PerfectDraftSensorDescription, ...] = (
         device_class=SensorDeviceClass.TEMPERATURE,
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         state_class=SensorStateClass.MEASUREMENT,
-        suggested_display_precision=0,
+        suggested_display_precision=1,
         value_fn=_get_temperature,
     ),
     PerfectDraftSensorDescription(
@@ -249,6 +257,15 @@ SENSOR_DESCRIPTIONS: tuple[PerfectDraftSensorDescription, ...] = (
         icon="mdi:keg",
         suggested_display_precision=0,
         value_fn=_get_volume_remaining,
+    ),
+    PerfectDraftSensorDescription(
+        key="pints_remaining",
+        translation_key="pints_remaining",
+        native_unit_of_measurement="pt",
+        state_class=SensorStateClass.MEASUREMENT,
+        icon="mdi:glass-pint-outline",
+        suggested_display_precision=1,
+        value_fn=_get_pints_remaining,
     ),
     PerfectDraftSensorDescription(
         key="connection",
@@ -366,6 +383,7 @@ SENSOR_DESCRIPTIONS: tuple[PerfectDraftSensorDescription, ...] = (
         device_class=SensorDeviceClass.TEMPERATURE,
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         icon="mdi:thermometer-check",
+        suggested_display_precision=1,
         value_fn=_get_target_temperature,
     ),
     PerfectDraftSensorDescription(
@@ -390,6 +408,7 @@ SENSOR_DESCRIPTIONS: tuple[PerfectDraftSensorDescription, ...] = (
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         icon="mdi:leaf",
         entity_registry_enabled_default=False,
+        suggested_display_precision=1,
         value_fn=_get_eco_temperature,
     ),
     PerfectDraftSensorDescription(

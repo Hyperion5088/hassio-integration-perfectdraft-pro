@@ -46,12 +46,12 @@ def _temperature_max(data: dict[str, Any]) -> float:
 
 def _target_temperature(data: dict[str, Any]) -> float | None:
     val = (data.get("setting") or {}).get("temperature")
-    return float(val) if val is not None else None
+    return round(float(val), 1) if val is not None else None
 
 
 def _eco_temperature(data: dict[str, Any]) -> float | None:
     val = (data.get("setting") or {}).get("ecoModeBeerTemperatureSetPoint")
-    return float(val) if val is not None else None
+    return round(float(val), 1) if val is not None else None
 
 
 NUMBER_DESCRIPTIONS: tuple[PerfectDraftNumberDescription, ...] = (
@@ -59,7 +59,7 @@ NUMBER_DESCRIPTIONS: tuple[PerfectDraftNumberDescription, ...] = (
         key="target_temperature_control",
         translation_key="target_temperature_control",
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
-        native_step=1,
+        native_step=0.1,
         icon="mdi:thermometer-check",
         value_fn=_target_temperature,
         update_key="temperature",
@@ -68,7 +68,7 @@ NUMBER_DESCRIPTIONS: tuple[PerfectDraftNumberDescription, ...] = (
         key="eco_temperature_control",
         translation_key="eco_temperature_control",
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
-        native_step=1,
+        native_step=0.1,
         icon="mdi:leaf",
         value_fn=_eco_temperature,
         update_key="ecoModeBeerTemperatureSetPoint",
@@ -132,7 +132,7 @@ class PerfectDraftNumber(
 
     async def async_set_native_value(self, value: float) -> None:
         """Set the number value through the PerfectDraft settings API."""
-        value = max(self.native_min_value, min(self.native_max_value, value))
+        value = round(max(self.native_min_value, min(self.native_max_value, value)), 1)
         await update_setting(
             self.coordinator,
             {self.entity_description.update_key: value},
@@ -148,7 +148,7 @@ class PerfectDraftIdealTemperatureNumber(
     _attr_entity_category = EntityCategory.CONFIG
     _attr_translation_key = "ideal_temperature_control"
     _attr_native_unit_of_measurement = UnitOfTemperature.CELSIUS
-    _attr_native_step = 1
+    _attr_native_step = 0.1
     _attr_icon = "mdi:beer-outline"
 
     def __init__(
@@ -170,10 +170,11 @@ class PerfectDraftIdealTemperatureNumber(
 
     @property
     def native_value(self) -> float | None:
-        return ideal_temperature(
+        value = ideal_temperature(
             active_product_id(self.coordinator),
             self.coordinator.data or {},
         )
+        return round(value, 1) if value is not None else None
 
     @property
     def available(self) -> bool:
@@ -189,7 +190,7 @@ class PerfectDraftIdealTemperatureNumber(
         product_id = active_product_id(self.coordinator)
         if product_id is None:
             return
-        value = max(self.native_min_value, min(self.native_max_value, value))
+        value = round(max(self.native_min_value, min(self.native_max_value, value)), 1)
         await self.coordinator.beer_data.async_set_ideal_temperature(product_id, value)
         data = dict(self.coordinator.data or {})
         data["_beer_data"] = self.coordinator.beer_data.snapshot()

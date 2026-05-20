@@ -1,7 +1,7 @@
 {
   "domain": "perfectdraft",
   "name": "PerfectDraft Taproom",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "documentation": "https://github.com/Hyperion5088/hass-perfectdraft-taproom",
   "issue_tracker": "https://github.com/Hyperion5088/hass-perfectdraft-taproom/issues",
   "codeowners": ["@Hyperion5088"],

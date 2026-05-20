@@ -16,6 +16,7 @@ PerfectDraft Taproom is based on the original PerfectDraft Pro Home Assistant in
 |--------|-------------|------|
 | Temperature | Current beer temperature | °C |
 | Keg Remaining | Beer left in the keg | % |
+| Pints Remaining | Beer left in the keg | pt |
 | Keg Freshness | Days remaining until 30-day freshness expires | days |
 | Active Keg Inserted | Server-reported keg insertion timestamp | timestamp |
 | Keg Age | Days since the active keg was inserted | days |
@@ -46,8 +47,8 @@ The integration exposes controls for documented machine settings that are also v
 
 | Control | Description |
 |---------|-------------|
-| Target Temperature | Number entity constrained to the machine-reported temperature range |
-| Eco Temperature | Number entity constrained to the machine-reported temperature range |
+| Target Temperature | Number entity constrained to the machine-reported temperature range, with 0.1 °C steps |
+| Eco Temperature | Number entity constrained to the machine-reported temperature range, with 0.1 °C steps |
 | Mode | Select entity using the documented mode options |
 | Volume Threshold | Select entity using the documented threshold values |
 | Eco Mode | Switch entity backed by the documented `mode` value (`eco`/`standard`) |

@@ -39,6 +39,7 @@
     "sensor": {
       "temperature": { "name": "Temperature" },
       "keg_remaining": { "name": "Keg Remaining" },
+      "pints_remaining": { "name": "Pints Remaining" },
       "connection": { "name": "Connection" },
       "door": { "name": "Door" },
       "pours": { "name": "Pours" },
