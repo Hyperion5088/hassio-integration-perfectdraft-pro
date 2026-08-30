@@ -1,4 +1,5 @@
 """Config flow for PerfectDraft integration."""
+
 from __future__ import annotations
 
 import logging
@@ -76,17 +77,15 @@ class PerfectDraftConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             client = PerfectDraftApiClient(session)
 
             try:
-                await client.authenticate(
-                    self._email, self._password, recaptcha_token
-                )
-            except AuthenticationError as err:
-                _LOGGER.error("Authentication failed: %s", err)
+                await client.authenticate(self._email, self._password, recaptcha_token)
+            except AuthenticationError:
+                _LOGGER.error("Authentication failed")
                 errors["base"] = "invalid_auth"
-            except PerfectDraftConnectionError as err:
-                _LOGGER.error("Connection failed: %s", err)
+            except PerfectDraftConnectionError:
+                _LOGGER.error("Connection failed during authentication")
                 errors["base"] = "cannot_connect"
-            except PerfectDraftApiError as err:
-                _LOGGER.error("API error during auth: %s", err)
+            except PerfectDraftApiError:
+                _LOGGER.error("API error during authentication")
                 errors["base"] = "unknown"
             else:
                 try:
@@ -95,19 +94,33 @@ class PerfectDraftConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     errors["base"] = "cannot_connect"
                 else:
                     machine_id = _extract_machine_id(profile)
+                    authenticated_email = str(
+                        profile.get(CONF_EMAIL) or self._email
+                    ).strip()
+                    entry_data = {
+                        CONF_EMAIL: authenticated_email,
+                        CONF_ACCESS_TOKEN: client.access_token,
+                        CONF_ID_TOKEN: client.id_token,
+                        CONF_REFRESH_TOKEN: client.refresh_token,
+                        CONF_MACHINE_ID: machine_id,
+                    }
 
-                    await self.async_set_unique_id(self._email.lower())
+                    await self.async_set_unique_id(authenticated_email.lower())
+
+                    if self.source == config_entries.SOURCE_REAUTH:
+                        self._abort_if_unique_id_mismatch(reason="wrong_account")
+                        self._password = None
+                        return self.async_update_reload_and_abort(
+                            self._get_reauth_entry(),
+                            data_updates=entry_data,
+                        )
+
                     self._abort_if_unique_id_configured()
+                    self._password = None
 
                     return self.async_create_entry(
-                        title=f"PerfectDraft Taproom ({self._email})",
-                        data={
-                            CONF_EMAIL: self._email,
-                            CONF_ACCESS_TOKEN: client.access_token,
-                            CONF_ID_TOKEN: client.id_token,
-                            CONF_REFRESH_TOKEN: client.refresh_token,
-                            CONF_MACHINE_ID: machine_id,
-                        },
+                        title=f"PerfectDraft Taproom ({authenticated_email})",
+                        data=entry_data,
                     )
 
         return self.async_show_form(

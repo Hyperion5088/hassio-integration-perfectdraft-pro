@@ -32,7 +32,8 @@
     },
     "abort": {
       "already_configured": "This PerfectDraft Taproom account is already configured.",
-      "reauth_successful": "Re-authentication successful."
+      "reauth_successful": "Re-authentication successful.",
+      "wrong_account": "The authenticated PerfectDraft account does not match this existing entry."
     }
   },
   "entity": {
